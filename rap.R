@@ -11,7 +11,7 @@ library(pglm)
 
 setwd("C:/Users/Jacky Yang/Desktop/Social Network/final project/2016_rap_network_analysis-master/data")
 
-rich<-read.csv('top100 richest.csv')
+#rich<-read.csv('top100 richest.csv')
 albumrank<-read.csv('billboard_rap_chart_albums_cleaned.csv')
 artist<-read.csv('artist_pair_counts.csv')
 
