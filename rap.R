@@ -182,8 +182,6 @@ cor(merge1$top_album,merge1$between)#high correlation
 cor(merge1$top_album,merge1$close)
 cor(merge1$top_album,merge1$eigen)
 
-
-
 plot(merge1$top_album,merge1$degree)
 
 
