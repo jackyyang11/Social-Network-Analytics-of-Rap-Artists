@@ -36,7 +36,6 @@ g<-set_edge_attr(g,"weight",value = artist$weight)
 
 plot(g,vertex.label=NA)
 
-
 #join album
 join<-left_join(artist,albumrank, by = c("source"="Artist"))
 join<-left_join(join,song_d, by = c("source"="artist"))
