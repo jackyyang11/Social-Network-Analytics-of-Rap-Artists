@@ -191,6 +191,3 @@ plot(merge1$top_album,merge1$degree)
 
 
 
-
-
-
