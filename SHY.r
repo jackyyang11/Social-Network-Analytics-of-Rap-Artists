@@ -28,3 +28,4 @@ g <- delete.vertices(g, V(g)[degree(g) == 0])
 plot(g, vertex.label = NA, layout = layout.kamada.kawai, vertex.size = 3, vertex.frame.color = NA, vertex.color = adjustcolor(V(g)$color, alpha.f = .75))
 #plot(g, vertex.label = NA, layout = layout_with_graphopt(g, charge = 1), vertex.size = 3, vertex.frame.color = NA, vertex.color = adjustcolor(V(g)$color, alpha.f = .75))
 
+

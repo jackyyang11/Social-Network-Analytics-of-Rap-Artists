@@ -11,7 +11,7 @@ library(pglm)
 library(gridExtra)
 library(grid)
 
-setwd("C:/Users/Jacky Yang/Desktop/Social Network/final project/2016_rap_network_analysis-master/data")
+#setwd("C:/Users/Jacky Yang/Desktop/Social Network/final project/2016_rap_network_analysis-master/data")
 
 top<-read.csv('top.csv')
 albumrank<-read.csv('billboard_rap_chart_albums_cleaned.csv')
