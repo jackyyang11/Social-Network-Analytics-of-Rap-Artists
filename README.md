@@ -1,1 +1,1 @@
-# Social-Network-Analytics-of-Rap-Artists
+# Social Network Analytics of Rap Artists
