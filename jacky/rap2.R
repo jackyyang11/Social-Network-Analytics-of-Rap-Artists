@@ -383,6 +383,15 @@ oneyear<-oneyear[out==0]
 oneyear_join<-left_join(oneyear,city, by =c("source"="source"))
 oneyear_join<-oneyear_join[!is.na(oneyear_join$City),]
 
+fouryear<-left_join(fouryears,degree, by = c("source"="artist"))
+fouryear<-left_join(fouryear,between, by = c("source"="artist"))
+fouryear<-left_join(fouryear,close, by = c("source"="artist"))
+fouryear<-left_join(fouryear,eigen, by = c("source"="artist"))
+colnames(fouryear)<-c("album","source","target","top.x","top.y","both_top","one_top","degree","between","close","eigen")
+fouryear<-as.data.table(fouryear)
+fouryear[,out:=ifelse(source==target,1,0)]
+fouryear<-fouryear[out==0]
+
 fiveyear<-left_join(fiveyears,degree, by = c("source"="artist"))
 fiveyear<-left_join(fiveyear,between, by = c("source"="artist"))
 fiveyear<-left_join(fiveyear,close, by = c("source"="artist"))
@@ -395,6 +404,15 @@ fiveyear_join<-left_join(fiveyear,city, by =c("source"="source"))
 fiveyear_join<-fiveyear_join[!is.na(fiveyear_join$City),]
 fiveyear_join2<-left_join(fiveyear,ryhme,by=c("source"="name"))
 fiveyear_join2<-fiveyear_join2[!is.na(fiveyear_join2$score),]
+
+#lagged effect analysis
+lagged<-cbind(fouryear[,5:12],fiveyear$top.x)
+lagged2<-cbind(fouryear[,5:12],oneyear$top.x)
+glm6<-glm(V2~degree+between+close+eigen,data=lagged,family = "binomial"(link="logit"))
+summary(glm6)
+
+glm6<-glm(V2~degree+between+close+eigen,data=lagged2,family = "binomial"(link="logit"))
+summary(glm6)
 
 glm6<-glm(top.x~degree+between+close+eigen,data=merge1,family = "binomial"(link="logit"))
 summary(glm6)
