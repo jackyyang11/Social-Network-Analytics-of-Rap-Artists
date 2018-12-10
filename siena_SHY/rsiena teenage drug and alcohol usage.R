@@ -79,8 +79,7 @@ CoEvolutionEffects
 CoEvolutionAlgo = sienaAlgorithmCreate(projname = 'CoEvol_results', diagonalize = 0.2)
 
 # estimate the model:
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                              effects = CoEvolutionEffects)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects)
 CoEvolutionResults
 
 # these t-ratios illustrate how well the model has converged
@@ -88,43 +87,34 @@ CoEvolutionResults
 # are not satisfactorily small (all less than 0.1 in absolute value),
 # run the estimation again:
 # we use prev ans to start the algorithm from where it stopped last time
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
 
 # test the specific parameter of interest:
 ? Wald.RSiena
 Multipar.RSiena(CoEvolutionResults, 15)
 
 # now let's replace average similarity by total similarity:
-CoEvolutionEffects = includeEffects(CoEvolutionEffects, include = FALSE,
-                        name = "drinking", avSim, interaction1 = "friendship")
-CoEvolutionEffects = includeEffects(CoEvolutionEffects,
-                        name = "drinking", totSim, interaction1 = "friendship")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, include = FALSE, name = "drinking", avSim, interaction1 = "friendship")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, name = "drinking", totSim, interaction1 = "friendship")
 CoEvolutionEffects
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects)
 CoEvolutionResults
 # if the t-ratios for convergence for the non-fixed effects
 # are not satisfactorily small (all less than 0.1 in absolute value),
 # run again:
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                      effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
 Multipar.RSiena(CoEvolutionResults, 16)
 
 # replace total similarity by average alter:
-CoEvolutionEffects = includeEffects(CoEvolutionEffects, include = FALSE,
-                    name = "drinking", totSim, interaction1 = "friendship")
-CoEvolutionEffects = includeEffects(CoEvolutionEffects,
-                    name = "drinking", avAlt, interaction1 = "friendship")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, include = FALSE, name = "drinking", totSim, interaction1 = "friendship")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, name = "drinking", avAlt, interaction1 = "friendship")
 CoEvolutionEffects
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects)
 CoEvolutionResults
 # if the t-ratios for convergence for the non-fixed effects
 # are not satisfactorily small (all less than 0.1 in absolute value),
 # run the estimation again:
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
 Multipar.RSiena(CoEvolutionResults, 15)
 
 # what could be called "total alter" is not implemented directly,
@@ -133,32 +123,24 @@ Multipar.RSiena(CoEvolutionResults, 15)
 # parameters fixed at 0.
 
 ? includeInteraction
-CoEvolutionEffects = setEffect(CoEvolutionEffects, avAlt, fix = TRUE, test = TRUE,
-                    name = "drinking", interaction1 = "friendship")
-CoEvolutionEffects = setEffect(CoEvolutionEffects, outdeg, fix = TRUE, test = TRUE,
-                    name = "drinking", interaction1 = "friendship")
-CoEvolutionEffects = includeInteraction(CoEvolutionEffects,
-                    name = "drinking", avAlt, outdeg,
-                    interaction1 = c("friendship", "friendship"))
+CoEvolutionEffects = setEffect(CoEvolutionEffects, avAlt, fix = TRUE, test = TRUE, name = "drinking", interaction1 = "friendship")
+CoEvolutionEffects = setEffect(CoEvolutionEffects, outdeg, fix = TRUE, test = TRUE, name = "drinking", interaction1 = "friendship")
+CoEvolutionEffects = includeInteraction(CoEvolutionEffects, name = "drinking", avAlt, outdeg, interaction1 = c("friendship", "friendship"))
 CoEvolutionEffects
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects)
 CoEvolutionResults
 # if the t-ratios for convergence for the non-fixed effects
 # are not satisfactorily small (all less than 0.1 in absolute value),
 # run the estimation again:
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
 CoEvolutionResults
 Multipar.RSiena(CoEvolutionResults, 19)
 
 # to see the results of the score-type tests for
 # the indegree and outdegree effects on drinking:
-CoEvolutionEffects = setEffect(CoEvolutionEffects, indeg, fix = TRUE, test = TRUE,
-                    name = "drinking", interaction1 = "friendship")
+CoEvolutionEffects = setEffect(CoEvolutionEffects, indeg, fix = TRUE, test = TRUE, name = "drinking", interaction1 = "friendship")
 CoEvolutionEffects
-CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData,
-                        effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
+CoEvolutionResults = siena07(CoEvolutionAlgo, data = CoEvolutionData, effects = CoEvolutionEffects, prevAns = CoEvolutionResults)
 Multipar.RSiena(CoEvolutionResults, 20)
 
 # The test for the outdegree effect comes close to significance,
