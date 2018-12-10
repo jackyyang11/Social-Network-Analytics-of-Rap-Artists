@@ -64,6 +64,7 @@ edge_2012<-edge_2012[!edge_2012$artist=='',]
 edge_2012<-edge_2012[min_two==TRUE]
 combn1<-edge_2012[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn1)<-c("album","source","target")
+write.csv(combn1,"combn1.csv")
 #2013
 edge_2013<-cSplit(edge_2013,"artist",",", "long")
 edge_2013$artist<-sub('\\]$', '', edge_2013$artist) 
@@ -75,6 +76,7 @@ edge_2013<-edge_2013[!edge_2013$artist=='',]
 edge_2013<-edge_2013[min_two==TRUE]
 combn2<-edge_2013[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn2)<-c("album","source","target")
+write.csv(combn2,"combn2.csv")
 # #2014
 # edge_2014<-cSplit(edge_2014,"artist",",", "long")
 # edge_2014$artist<-sub('\\]$', '', edge_2014$artist) 
@@ -98,7 +100,7 @@ edge_2015<-edge_2015[!edge_2015$artist=='',]
 edge_2015<-edge_2015[min_two==TRUE]
 combn3<-edge_2015[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn3)<-c("album","source","target")
-
+write.csv(combn3,"combn3.csv")
 #2016
 edge_2016<-cSplit(edge_2016,"artist",",", "long")
 edge_2016$artist<-sub('\\]$', '', edge_2016$artist) 
@@ -110,7 +112,7 @@ edge_2016<-edge_2016[!edge_2016$artist=='',]
 edge_2016<-edge_2016[min_two==TRUE]
 combn4<-edge_2016[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn4)<-c("album","source","target")
-
+write.csv(combn4,"combn4.csv")
 #2017
 edge_2017<-cSplit(edge_2017,"artist",",", "long")
 edge_2017$artist<-sub('\\]$', '', edge_2017$artist) 
@@ -122,6 +124,7 @@ edge_2017<-edge_2017[!edge_2017$artist=='',]
 edge_2017<-edge_2017[min_two==TRUE]
 combn5<-edge_2017[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn5)<-c("album","source","target")
+write.csv(combn5,"combn5.csv")
 #2018
 edge_2018<-cSplit(edge_2018,"artist",",", "long")
 edge_2018$artist<-sub('\\]$', '', edge_2018$artist) 
@@ -134,6 +137,7 @@ edge_2018<-edge_2018[min_two==TRUE]
 edge_2018<-edge_2018[!edge_2018$artist=='',]
 combn6<-edge_2018[,as.data.table(t(combn(artist,2))), .(`album`)]
 colnames(combn6)<-c("album","source","target")
+write.csv(combn6,"combn6.csv")
 
 # all years edge ----------------------------------------------------------
 alledge<-rbind(edge_2012,edge_2013,edge_2015,edge_2016,edge_2017,edge_2018)
@@ -404,6 +408,10 @@ fiveyear_join<-left_join(fiveyear,city, by =c("source"="source"))
 fiveyear_join<-fiveyear_join[!is.na(fiveyear_join$City),]
 fiveyear_join2<-left_join(fiveyear,ryhme,by=c("source"="name"))
 fiveyear_join2<-fiveyear_join2[!is.na(fiveyear_join2$score),]
+#regression
+glm6<-glm(top.x~degree+between+close+eigen,data=merge1,family = "binomial"(link="logit"))
+summary(glm6)
+
 
 #lagged effect analysis
 lagged<-cbind(fouryear[,5:12],fiveyear$top.x)
@@ -414,8 +422,6 @@ summary(glm6)
 glm6<-glm(V2~degree+between+close+eigen,data=lagged2,family = "binomial"(link="logit"))
 summary(glm6)
 
-glm6<-glm(top.x~degree+between+close+eigen,data=merge1,family = "binomial"(link="logit"))
-summary(glm6)
 oneyear$pre_2016<-predict(glm6,oneyear[,8:11], type="response")
 oneyear[,pre_classify:= ifelse(pre_2016>0.9999996,1,0)]
 oneyear[,right:=ifelse(pre_classify==one_top,1,0)]
@@ -437,7 +443,7 @@ n %v% "close" <-fiveyear$close
 n %v% "between" <-fiveyear$between
 n %v% "eigen" <-fiveyear$eigen
 n %v% "top"   <-fiveyear$top.x
-ergm<-ergm(n~edges+triangle+nodecov("top"),control=control.ergm(MCMLE.maxit=20))
+ergm<-ergm(n~edges+triangle)
 ergm<-ergm(n~edges+triangle+nodecov("top"))
 summary(ergm)
 
@@ -483,7 +489,7 @@ mean(between10$score)
 mean(degree10$score)
 mean(eigen10$score)
 
-
+#-------------------------------------------------------------------
 
 
 close[which.max(close$`close.closeness(g2)`)]
@@ -502,13 +508,20 @@ verticesHavingMaxCoreness <- which(coreness == maxCoreness)
 kcore <- induced.subgraph(graph=g,vids=verticesHavingMaxCoreness)
 
 #clique analysis----------------------------------------------------------------------------
-clique<-cliques(g2,3)
+clique<-cliques(g2,2)
 summary(clique)
-#find out the largest clique
-largest_cliques(g3)
+#find out the largest clique g-4 years, g2-5 years, g3-1 year
+largest_cliques(g2)
 plot(g3,vertex.label=NA,vertex.size=5)
 #create a DT with just rapper pairs and city and weight
 edges_for_city <- top[,c('source', 'target', 'weight', 'City.x')]
+
+#top list
+largeclique<-fiveyear[fiveyear$source=="Don Q"|fiveyear$source=="Chris Brown"|fiveyear$source=="21 Savage"|fiveyear$source=="Desiigner"]
+smallclique<-fiveyear[fiveyear$source=="Anderson .Paak"|fiveyear$source=="Candice Pillay"]
+
+#rhytme factor
+
 
 #make a graph for edgesforcity
 rapper_graph_city <-graph.data.frame(edges_for_city,directed = FALSE)
