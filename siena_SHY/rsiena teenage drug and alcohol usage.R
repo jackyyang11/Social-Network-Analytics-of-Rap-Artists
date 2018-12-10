@@ -64,12 +64,10 @@ print01Report(CoEvolutionData, modelname = 's50_3_CoEvinit')
 CoEvolutionEffects = includeEffects(CoEvolutionEffects, transTrip, transRecTrip, cycle3)
 CoEvolutionEffects
 # now sender, receiver and homophily effects for friendship formation:
-CoEvolutionEffects = includeEffects(CoEvolutionEffects,
-                            egoX, altX, simX, interaction1 = "drinking")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, egoX, altX, simX, interaction1 = "drinking")
 CoEvolutionEffects
 # now the assimilation effect for drinking:
-CoEvolutionEffects = includeEffects(CoEvolutionEffects,
-                            name = "drinking", avSim, interaction1 = "friendship")
+CoEvolutionEffects = includeEffects(CoEvolutionEffects, name = "drinking", avSim, interaction1 = "friendship")
 CoEvolutionEffects
 # note that you need to additionally specify 'name="drinking"' because
 # the default for 'name' is the network variable (here "friendship").
