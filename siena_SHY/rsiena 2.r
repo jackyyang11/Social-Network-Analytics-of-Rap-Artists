@@ -1,111 +1,17 @@
 
 library(sna)
+library(igraph)
 library(RSiena)
 library(data.table)
 
-dt2015 <- fread('2015.csv')[, -1]
-dtNew <- dt2015
-colnames(dtNew)[2] <- 'target'
-colnames(dtNew)[3] <- 'source'
-dt2015 <- rbind(dt2015, dtNew)
-
-dt2016 <- fread('2016.csv')[, -1]
-dtNew <- dt2016
-colnames(dtNew)[2] <- 'target'
-colnames(dtNew)[3] <- 'source'
-dt2016 <- rbind(dt2016, dtNew)
-
-dt2017 <- fread('2017.csv')[, -1]
-dtNew <- dt2017
-colnames(dtNew)[2] <- 'target'
-colnames(dtNew)[3] <- 'source'
-dt2017 <- rbind(dt2017, dtNew)
-
-#dt2018 <- fread('2018.csv')[, -1]
-#dtNew <- dt2018
-#colnames(dtNew)[2] <- 'target'
-#colnames(dtNew)[3] <- 'source'
-#dt2018 <- rbind(dt2018, dtNew)
-
-
-
-v2015 <- sort(unique(unlist(dt2015[, c('source')])))
-v2016 <- sort(unique(unlist(dt2016[, c('source')])))
-v2017 <- sort(unique(unlist(dt2017[, c('source')])))
-#v2018 <- sort(unique(unlist(dt2018[, c('source')])))
-
-vArtist <- intersect(v2015, v2016)
-vArtist <- intersect(vArtist, v2017)
-vArtist <- intersect(vArtist, v2016)
-vArtist <- intersect(vArtist, v2015)
-#vArtist <- intersect(vArtist, v2018)
-
-#write.csv(vArtist, 'artist.csv')
-#vArtist <- fread('artist.csv')[-1, -1]
-#vArtist <- split(vArtist, seq(nrow(vArtist))) # backup, notice there are 71 in common
-
-dt2015 <- dt2015[dt2015[, source %in% vArtist & target %in% vArtist],]
-dt2016 <- dt2016[dt2016[, source %in% vArtist & target %in% vArtist],]
-dt2017 <- dt2017[dt2017[, source %in% vArtist & target %in% vArtist],]
-#dt2018 <- dt2018[dt2018[, source %in% vArtist & target %in% vArtist],]
-
-dtArtist <- data.table(vArtist)
-
-dt <- sort(unique(dt2015[, c('source', 'top.x')]))
-dt[, year_2015 := sum(top.x), by = 'source']
-y2015 <- sort(unique(dt[, c('source', 'year_2015')]))
-
-dt <- sort(unique(dt2016[, c('source', 'top.x')]))
-dt[, year_2016 := sum(top.x), by = 'source']
-y2016 <- sort(unique(dt[, c('source', 'year_2016')]))
-
-dt <- sort(unique(dt2017[, c('source', 'top.x')]))
-dt[, year_2017 := sum(top.x), by = 'source']
-y2017 <- sort(unique(dt[, c('source', 'year_2017')]))
-
-#dt <- sort(unique(dt2018[, c('source', 'top.x')]))
-#dt[, year_2018 := sum(top.x), by = 'source']
-#v2018 <- sort(unique(dt[, c('source', 'year_2018')]))
-
-dtTop <- merge(y2015, y2016, by = 'source')
-dtTop <- merge(dtTop, y2017, by = 'source')
-#dtTop <- merge(dtTop, v2018, by = 'source')
-
-#write.csv(dtTop, 'dtTop.csv')
-#dtTop <- fread('dtTop.csv')[, -1]
-
-net2015 <- network(dt2015[, c('source', 'target')])
-net2016 <- network(dt2016[, c('source', 'target')])
-net2017 <- network(dt2017[, c('source', 'target')])
-#net2018 <- network(dt2018[, c('source', 'target')])
-
-
-
-nacf(net2015, dtTop[, year_2015], type = "moran")
-nacf(net2016, dtTop[, year_2016], type = "moran")
-nacf(net2017, dtTop[, year_2017], type = "moran")
-#nacf(net2018, dtTop[, year_2018], type = "moran")
-
-plot(net2015)
-plot(net2016)
-plot(net2017)
-
-
-#write.csv(dt2015, 'dt2015.csv')
-#write.csv(dt2016, 'dt2016.csv')
-#write.csv(dt2017, 'dt2017.csv')
-
+dtTop <- fread('dtTop.csv')[, -1]
 dt2015 <- fread('dt2015.csv')[, -1]
 dt2016 <- fread('dt2016.csv')[, -1]
 dt2017 <- fread('dt2017.csv')[, -1]
 
-library(igraph)
-
 g2015 <- graph.edgelist(as.matrix(dt2015[, c('target', 'source')]))
 g2016 <- graph.edgelist(as.matrix(dt2016[, c('target', 'source')]))
 g2017 <- graph.edgelist(as.matrix(dt2017[, c('target', 'source')]))
-
-
 
 mat2015 <- as.matrix(as_adj(g2015))
 mat2016 <- as.matrix(as_adj(g2016))
@@ -246,4 +152,3 @@ siena.table(CoEvolutionResults) # .tex file
 
 # and in html (can be imported into MS-Word) with
 siena.table(CoEvolutionResults, type = "html") #html
-
