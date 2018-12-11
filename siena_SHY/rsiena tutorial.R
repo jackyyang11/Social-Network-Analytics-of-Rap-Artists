@@ -72,7 +72,7 @@ CoEvolutionEffects
 # note that you need to additionally specify 'name="drinking"' because
 # the default for 'name' is the network variable (here "friendship").
 
-# mow create an algorithm object:
+# now create an algorithm object:
 # diagonalize specifies how much of the surrounding neighborhood/matrix to use in the calculation
 # this value ranges from 0 to 1, lower values are more efficient but higher values are more stable
 # this is similar to the difference between ubcf and ibcf in the recommender algorithm from last class
